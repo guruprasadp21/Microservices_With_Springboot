@@ -1,0 +1,44 @@
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        # Circuit Breaker Health Indicator
+        registerHealthIndicator: true
+
+        # Circuit Breaker Event Buffer
+        eventConsumerBufferSize: 10
+
+        # Circuit Breaker Thresholds
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+
+        # Circuit Breaker State Transitions
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 3
+
+        # Circuit Breaker Sliding Window
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+        # Circuit Breaker Exception Handling
+        recordExceptions:
+          - java.lang.IllegalStateException
+          # Uncomment the following line if needed
+          # - org.springframework.cloud.client.loadbalancer.NoServersAvailableException
+
+
+  retry:
+    instances:
+      ratingHotelService:
+        max-attempts: 3
+        wait-duration: 5s
+
+
+  ratelimiter:
+    instances:
+      userRateLimiter:
+        limitRefreshPeriod: 4s
+        limitForPeriod: 3
+        timeoutDuration: 0s
+
